@@ -4,7 +4,8 @@ import (
 	"backend/helper"
 	"backend/models"
 	"backend/repository"
-	"errors"
+	"backend/validation"
+	"github.com/google/uuid"
 )
 
 type UrlService interface {
@@ -15,18 +16,11 @@ type urlService struct {
 	urlRepo repository.UrlRepository
 }
 
-func NewUrlService(urlRepo repository.UrlRepository) UrlService {
-	return &urlService{urlRepo}
-}
-
-func (u *urlService) CreateUrl(originalUrl string) (*models.Url, error) {
-	if originalUrl == "" {
-		return nil, errors.New("original URL cannot be empty")
-	}
+func (u *urlService) CreateUrl(req validation.CreateUrlRequest) (*models.Url, error) {
 	shortCode := helper.GenerateShortCode()
 	newUrl := &models.Url{
 		ID:          uuid.NewString(),
-		OriginalURL: originalUrl,
+		OriginalURL: req.OriginalUrl,
 		ShortCode:   shortCode,
 	}
 	return u.urlRepo.Save(newUrl)
