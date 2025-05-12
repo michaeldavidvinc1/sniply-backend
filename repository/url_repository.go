@@ -26,8 +26,9 @@ func (u urlRepository) FindById(id string) (*models.Url, error) {
 }
 
 func (u urlRepository) FindByShortCode(shortCode string) (*models.Url, error) {
-	err := u.db.Where("short_code = ?", shortCode).First(&models.Url{}).Error
-	return &models.Url{}, err
+	var url models.Url
+	err := u.db.Where("short_code = ?", shortCode).First(&url).Error
+	return &url, err
 }
 
 func NewUrlRepository(db *gorm.DB) UrlRepository {

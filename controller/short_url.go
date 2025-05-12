@@ -47,5 +47,21 @@ func (uc *ShortUrlController) CreateUrl(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "ok",
+		"message": "Url shortly successfully",
+		"data":    result,
+	})
+}
+
+func (uc *ShortUrlController) RedirectUrl(c *gin.Context) {
+	shortCode := c.Param("shortCode")
+
+	url, err := uc.UrlService.GetOriginalUrl(shortCode)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "URL not found"})
+		return
+	}
+
+	c.Redirect(http.StatusMovedPermanently, url.OriginalURL)
 }
