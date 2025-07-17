@@ -5,7 +5,6 @@ import (
 	"backend/models"
 	"backend/repository"
 	"backend/validation"
-	"fmt"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -31,11 +30,6 @@ func (u *urlService) CreateUrl(req validation.CreateUrlRequest) (*models.Url, er
 
 func (u *urlService) GetOriginalUrl(shortCode string) (*models.Url, error) {
 	result, err := u.urlRepo.FindByShortCode(shortCode)
-
-	// Debug output
-	fmt.Println("ShortCode:", shortCode)
-	fmt.Println("Result:", result)
-	fmt.Println("Error:", err)
 
 	return result, err
 }
